@@ -28,6 +28,9 @@ At its core, Inveigh is a .NET packet sniffer that listens for and responds to L
 
 ##### Inveigh running with elevated privilege
 
+#test web request with ntlm auth: \
+#Invoke-WebRequest -UseBasicParsing "http://127.0.0.1" -UseDefaultCredentials -Method GET
+
 Set-ExecutionPolicy Bypass -Scope Process   
 
 Import-Module .\inveigh.ps1
