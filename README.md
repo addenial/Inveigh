@@ -27,6 +27,11 @@ Inveigh is a PowerShell ADIDNS/LLMNR/NBNS/mDNS/DNS spoofer and man-in-the-middle
 At its core, Inveigh is a .NET packet sniffer that listens for and responds to LLMNR/mDNS/NBNS/DNS requests while also capturing incoming NTLMv1/NTLMv2 authentication attempts over the Windows SMB service. The primary advantage of this packet sniffing method on Windows is that port conflicts with default running services are avoided. Inveigh also contains HTTP/HTTPS/Proxy listeners for capturing incoming authentication requests and performing attacks. Inveigh relies on creating multiple runspaces to load the sniffer, listeners, and control functions within a single shell and PowerShell process.
 
 ##### Inveigh running with elevated privilege
+
+Set-ExecutionPolicy Bypass -Scope Process
+Import-Module .\inveigh.ps1
+invoke-inveigh -IP 192.168.1.10 -consoleoutput y -fileoutput y -NBNS y -SMB y -ConsoleUnique n -MachineAccounts y
+stop-inveigh
 ![inveigh1 4](https://user-images.githubusercontent.com/5897462/45662029-1b5e6300-bace-11e8-8180-32f8d377d48b.PNG)
 
 Since the .NET packet sniffer requires elevated privilege, Inveigh also contains UDP listener based LLMNR/mDNS/NBNS/DNS functions. These listeners can provide the ability to perform spoofing with only unprivileged access. Port conflicts can be an issue with any running listeners bound to 0.0.0.0 on some versions of Windows. Server 2016 and Windows 10 seem to have relaxed rules around exclusive use of the LLMNR and mDNS ports. Inveigh can usually perform unprivileged NBNS spoofing on all versions of Windows. Most of Inveigh’s other features, with the primary exceptions of the packet sniffer’s SMB capture and HTTPS (due to certificate install privilege requirements), do not require elevated privilege. Note that an enabled local firewall blocking all relevant ports, and without a listed service with open firewall access suitable for migration, can still prevent Inveigh from working with just unprivileged access since privileged access will likely be needed to modify the firewall settings.
